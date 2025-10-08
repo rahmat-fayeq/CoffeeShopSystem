@@ -1,5 +1,7 @@
 using CoffeShopSystem.Data;
+using CoffeShopSystem.Profiles;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAutoMapper(cfg => {}, typeof(AutoMapperProfile).Assembly);
 
 var app = builder.Build();
 
