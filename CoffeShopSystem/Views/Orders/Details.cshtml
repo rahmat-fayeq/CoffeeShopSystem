@@ -1,0 +1,39 @@
+﻿@model CoffeShopSystem.ViewModels.OrderVM.OrderDetailsVM
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<h2>Order Details</h2>
+<hr />
+<div class="mb-3">
+    <p><strong>Table:</strong> @Model.TableName</p>
+    <p><strong>Ordered At:</strong> @Model.CreatedAt.ToString("g")</p>
+    <p><strong>Discount:</strong> @Model.Discount</p>
+    <p><strong>Total:</strong> @Model.Total</p>
+</div>
+
+<h4>Order Items</h4>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Item</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.ItemName</td>
+                <td>@item.Price</td>
+                <td>@item.Quantity</td>
+                <td>@(item.Price* item.Quantity)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a class="btn btn-secondary" asp-action="Index">Back to List</a>

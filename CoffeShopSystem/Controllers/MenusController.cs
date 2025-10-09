@@ -86,7 +86,10 @@ namespace CoffeShopSystem.Controllers
             {
                 return NotFound();
             }
-            return View(menu);
+
+            var menuVM = _mapper.Map<MenuVM>(menu);
+
+            return View(menuVM);
         }
 
         // POST: Menus/Edit/5

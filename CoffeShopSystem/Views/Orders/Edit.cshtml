@@ -1,0 +1,152 @@
+﻿@model CoffeShopSystem.ViewModels.OrderVM.EditOrderVM
+
+@{
+    ViewData["Title"] = "Edit Order";
+    var tables = ViewBag.Tables as List<CoffeShopSystem.Models.Table>;
+    var menus = ViewBag.Menus as List<CoffeShopSystem.Models.Menu>;
+}
+
+<h2>Edit Order</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="mb-3">
+        <label for="TableId">Select Table</label>
+        <select asp-for="TableId" class="form-control" required>
+            <option value="">--Select Table--</option>
+            @foreach (var table in tables)
+            {
+                <option value="@table.Id" selected="@(table.Id == Model.TableId)">
+                    Table @table.TableNumber - Floor @table.FloorNumber
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="Discount">Discount</label>
+        <input asp-for="Discount" type="number" min="0" step="0.01" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label for="menuSelect">Select Menu Items</label>
+        <select id="menuSelect" class="form-control" multiple="multiple" style="width: 100%;">
+            @foreach (var menu in menus)
+            {
+                var selected = Model.Items.Any(i => i.MenuId == menu.Id) ? "selected" : "";
+                <option value="@menu.Id" data-price="@menu.Price" selected="@(selected == "selected")">@menu.Item (@menu.Price.ToString("C"))</option>
+            }
+        </select>
+    </div>
+
+    <h4>Selected Items</h4>
+    <table class="table table-bordered" id="selectedItemsTable">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Items.Count; i++)
+            {
+                <tr data-menu-id="@Model.Items[i].MenuId">
+                    <td>
+                        @Model.Items[i].ItemName
+                        <input type="hidden" name="Items[@i].MenuId" value="@Model.Items[i].MenuId" />
+                        <input type="hidden" name="Items[@i].ItemName" value="@Model.Items[i].ItemName" />
+                        <input type="hidden" name="Items[@i].Price" value="@Model.Items[i].Price" />
+                    </td>
+                    <td>@Model.Items[i].Price.ToString("C")</td>
+                    <td>
+                        <input type="number" name="Items[@i].Quantity" value="@Model.Items[i].Quantity" min="1" class="form-control" />
+                    </td>
+                    <td><button type="button" class="btn btn-danger btn-sm removeItem">Remove</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-success">Save Changes</button>
+    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
+</form>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#menuSelect').select2({
+                placeholder: "Search and select menu items"
+            });
+
+            let counter = @Model.Items.Count;
+
+            function rebuildIndexes() {
+                counter = 0;
+                $('#selectedItemsTable tbody tr').each(function () {
+                    $(this).find('input[name*="MenuId"]').attr('name', `Items[${counter}].MenuId`);
+                    $(this).find('input[name*="ItemName"]').attr('name', `Items[${counter}].ItemName`);
+                    $(this).find('input[name*="Price"]').attr('name', `Items[${counter}].Price`);
+                    $(this).find('input[name*="Quantity"]').attr('name', `Items[${counter}].Quantity`);
+                    counter++;
+                });
+            }
+
+            $('#menuSelect').on('change', function () {
+                const selectedIds = $(this).val() || [];
+                const tbody = $('#selectedItemsTable tbody');
+
+                // Remove unselected rows
+                tbody.find('tr').each(function () {
+                    const menuId = $(this).data('menu-id').toString();
+                    if (!selectedIds.includes(menuId)) {
+                        $(this).remove();
+                    }
+                });
+
+                // Add newly selected items
+                $('#menuSelect option:selected').each(function () {
+                    const menuId = $(this).val();
+                    if ($('#selectedItemsTable tbody tr[data-menu-id="' + menuId + '"]').length === 0) {
+                        const itemName = $(this).text();
+                        const price = parseFloat($(this).data('price'));
+
+                        tbody.append(`
+<tr data-menu-id="${menuId}">
+    <td>
+        ${itemName}
+        <input type="hidden" name="Items[${counter}].MenuId" value="${menuId}" />
+        <input type="hidden" name="Items[${counter}].ItemName" value="${itemName}" />
+        <input type="hidden" name="Items[${counter}].Price" value="${price}" />
+    </td>
+    <td>${price.toFixed(2)}</td>
+    <td>
+        <input type="number" name="Items[${counter}].Quantity" value="1" min="1" class="form-control" />
+    </td>
+    <td><button type="button" class="btn btn-danger btn-sm removeItem">Remove</button></td>
+</tr>
+                        `);
+                        counter++;
+                    }
+                });
+
+                rebuildIndexes();
+            });
+
+            // Remove button
+            $('#selectedItemsTable').on('click', '.removeItem', function () {
+                const row = $(this).closest('tr');
+                const menuId = row.data('menu-id').toString();
+                row.remove();
+
+                const select = $('#menuSelect');
+                const selected = select.val() || [];
+                select.val(selected.filter(id => id != menuId)).trigger('change');
+
+                rebuildIndexes();
+            });
+        });
+    </script>
+}

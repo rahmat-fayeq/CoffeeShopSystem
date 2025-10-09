@@ -1,0 +1,19 @@
+﻿@model CoffeShopSystem.Models.Order
+
+@{
+    ViewData["Title"] = "Delete Order";
+}
+
+<h2>Delete Order</h2>
+
+<div class="alert alert-danger">
+    <h4>Are you sure you want to delete this order?</h4>
+    <p>Table: @Model.Table.TableNumber</p>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>
+
