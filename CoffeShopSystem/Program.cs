@@ -1,3 +1,4 @@
+using AspNetCoreHero.ToastNotification;
 using CoffeShopSystem.Data;
 using CoffeShopSystem.Profiles;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAutoMapper(cfg => {}, typeof(AutoMapperProfile).Assembly);
+
+// Notification
+builder.Services.AddNotyf(config =>
+{
+    config.DurationInSeconds = 2;
+    config.IsDismissable = true;
+    config.Position = NotyfPosition.TopCenter;
+}
+);
 
 var app = builder.Build();
 

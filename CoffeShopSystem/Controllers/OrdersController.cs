@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using CoffeShopSystem.Data;
 using CoffeShopSystem.Models;
@@ -11,11 +12,13 @@ public class OrdersController : Controller
 {
     private readonly AppDbContext _context;
     private readonly IMapper _mapper;
+    private readonly INotyfService _notyf;
 
-    public OrdersController(AppDbContext context, IMapper mapper)
+    public OrdersController(AppDbContext context, IMapper mapper, INotyfService notyf)
     {
         _context = context;
         _mapper = mapper;
+        _notyf = notyf;
     }
 
     // GET: Orders
@@ -101,6 +104,8 @@ public class OrdersController : Controller
 
         _context.Orders.Add(order);
         await _context.SaveChangesAsync();
+
+        _notyf.Success("Order Added Successfully");
 
         return RedirectToAction(nameof(Index));
     }
@@ -194,6 +199,9 @@ public class OrdersController : Controller
         }
 
         await _context.SaveChangesAsync();
+
+        _notyf.Information("Order Updated Successfully");
+
         return RedirectToAction(nameof(Index));
     }
 
@@ -228,6 +236,8 @@ public class OrdersController : Controller
             _context.Orders.Remove(order);
 
             await _context.SaveChangesAsync();
+
+            _notyf.Warning("Order Deleted Successfully");
         }
 
         return RedirectToAction(nameof(Index));
@@ -242,6 +252,8 @@ public class OrdersController : Controller
 
         order.Status = order.Status == "Pending" ? "Completed" : "Pending";
         await _context.SaveChangesAsync();
+
+        _notyf.Custom("Order Submitted to Customer", 2, "#B600FF", "fa fa-check-circle");
 
         return RedirectToAction(nameof(Index));
     }
