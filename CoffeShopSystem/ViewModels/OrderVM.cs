@@ -8,6 +8,7 @@
             public string ItemName { get; set; } = string.Empty;
             public decimal Price { get; set; }
             public int Quantity { get; set; } = 1;
+            public string Status { get; set; } = string.Empty;
         }
 
         public class CreateOrderVM
@@ -31,6 +32,7 @@
             public string TableName { get; set; } = string.Empty;
             public decimal Discount { get; set; }
             public DateTime CreatedAt { get; set; }
+            public string Status { get; set; } = string.Empty;
             public List<OrderItemVM> Items { get; set; } = new();
             public decimal Total => Items.Sum(i => i.Price * i.Quantity) - Discount;
         }

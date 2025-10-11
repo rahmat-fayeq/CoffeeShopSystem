@@ -233,4 +233,18 @@ public class OrdersController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpPost]
+    public async Task<IActionResult> ToggleStatus(int id)
+    {
+        var order = await _context.Orders.FindAsync(id);
+        if (order == null)
+            return NotFound();
+
+        order.Status = order.Status == "Pending" ? "Completed" : "Pending";
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Index));
+    }
+
+
 }
