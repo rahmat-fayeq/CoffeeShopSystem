@@ -7,7 +7,7 @@
 <h2>Orders</h2>
 
 <p>
-    <a class="btn btn-primary" asp-action="Create">Create New Order</a>
+    <a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-circle"></i> Add New Order</a>
 </p>
 
 <table class="table table-striped">
@@ -34,23 +34,38 @@
                 <td>
                     @if (order.Status == "Completed")
                     {
-                        <span class="badge badge-pill bg-success">Completed</span>
+                        <span class="badge badge-pill bg-success">
+                            <i class="bi bi-check"></i> Completed
+                        </span>
                     }
                     else
                     {
-                        <span class="badge badge-pill bg-danger">Pending</span>
+                        <span class="badge badge-pill bg-danger">
+                            <i class="bi bi-x"></i> Pending
+                        </span>
                     }
 
                 </td>
                 <td>
-                     <form asp-action="ToggleStatus" asp-route-id="@order.Id" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-sm @(order.Status == "Pending" ? "btn-success" : "btn-warning")">
-                            @(order.Status == "Pending" ? "Mark Completed" : "Set Pending")
+                    <form asp-action="ToggleStatus" asp-route-id="@order.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-sm @(order.Status == "Pending" ? "btn-success" : "btn-danger")">
+                            @if (order.Status == "Pending")
+                            {
+                                <i class="bi bi-check2-circle"></i>
+                            }
+                            else
+                            {
+                                <i class="bi bi-x-circle-fill"></i>
+                                
+                            }
                         </button>
+
+
                     </form>
-                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@order.Id">Details</a>
-                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@order.Id">Edit</a>
-                    <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@order.Id">Delete</a>
+
+                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@order.Id"><i class="bi bi-eye"></i></a>
+                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@order.Id"><i class="bi bi-pencil-square"></i></a>
+                    <a class="btn btn-warning btn-sm" asp-action="Delete" asp-route-id="@order.Id"><i class="bi bi-trash3"></i></a>
                 </td>
             </tr>
         }
