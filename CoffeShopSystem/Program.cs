@@ -20,6 +20,7 @@ builder.Services.AddNotyf(config =>
     config.DurationInSeconds = 2;
     config.IsDismissable = true;
     config.Position = NotyfPosition.TopCenter;
+    config.HasRippleEffect = true;
 }
 );
 
