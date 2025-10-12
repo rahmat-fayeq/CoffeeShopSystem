@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using AutoMapper;
 using CoffeShopSystem.Data;
 using CoffeShopSystem.Models;
 using CoffeShopSystem.ViewModels;
@@ -16,11 +17,13 @@ namespace CoffeShopSystem.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly INotyfService _notfy;
 
-        public TablesController(AppDbContext context, IMapper mapper)
+        public TablesController(AppDbContext context, IMapper mapper, INotyfService notfy)
         {
             _context = context;
             _mapper = mapper;
+            _notfy = notfy;
         }
 
         // GET: Tables
@@ -70,6 +73,7 @@ namespace CoffeShopSystem.Controllers
                 var table = _mapper.Map<Table>(model);
                 _context.Add(table);
                 await _context.SaveChangesAsync();
+                _notfy.Success("Table created successfully");
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
@@ -110,6 +114,7 @@ namespace CoffeShopSystem.Controllers
                 {
                     var table = _mapper.Map<Table>(model);
                     _context.Update(table);
+                    _notfy.Information("Table updated successfully");
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -158,6 +163,7 @@ namespace CoffeShopSystem.Controllers
             }
 
             await _context.SaveChangesAsync();
+            _notfy.Warning("Table deleted successfully");
             return RedirectToAction(nameof(Index));
         }
 

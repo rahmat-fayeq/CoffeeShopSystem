@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using AutoMapper;
 using CoffeShopSystem.Data;
 using CoffeShopSystem.Models;
 using CoffeShopSystem.ViewModels;
-using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoffeShopSystem.Controllers
 {
@@ -16,11 +17,13 @@ namespace CoffeShopSystem.Controllers
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly INotyfService _notyf;
 
-        public MenusController(AppDbContext context, IMapper mapper)
+        public MenusController(AppDbContext context, IMapper mapper, INotyfService notyf)
         {
             _context = context;
             _mapper = mapper;
+            _notyf = notyf;
         }
 
         // GET: Menus
@@ -68,6 +71,7 @@ namespace CoffeShopSystem.Controllers
 
                 _context.Add(menu);
                 await _context.SaveChangesAsync();
+                _notyf.Success("Menu item created successfully");
                 return RedirectToAction(nameof(Index));
             }
             return View(model);
@@ -109,6 +113,7 @@ namespace CoffeShopSystem.Controllers
                     var menu = _mapper.Map<Menu>(model);
                     _context.Update(menu);
                     await _context.SaveChangesAsync();
+                    _notyf.Information("Menu item updated successfully");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -157,6 +162,7 @@ namespace CoffeShopSystem.Controllers
             }
 
             await _context.SaveChangesAsync();
+            _notyf.Warning("Menu item deleted successfully");
             return RedirectToAction(nameof(Index));
         }
 
