@@ -6,54 +6,63 @@
     var menus = ViewBag.Menus as List<CoffeShopSystem.Models.Menu>;
 }
 
-<h2>Create Order</h2>
+<div class="d-flex justify-content-center align-items-center mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h5>Add Order</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <div class="mb-3">
+                    <label for="TableId">Select Table</label>
+                    <select asp-for="TableId" class="form-control" style="width: 100%;" required>
+                        <option value="">--Select Table--</option>
+                        @foreach (var table in tables)
+                        {
+                            <option value="@table.Id">Table @table.TableNumber - Floor @table.FloorNumber</option>
+                        }
+                    </select>
+                </div>
 
-<form asp-action="Create" method="post">
-    <div class="mb-3">
-        <label for="TableId">Select Table</label>
-        <select asp-for="TableId" class="form-control" style="width: 100%;" required>
-            <option value="">--Select Table--</option>
-            @foreach (var table in tables)
-            {
-                <option value="@table.Id">Table @table.TableNumber - Floor @table.FloorNumber</option>
-            }
-        </select>
+                <div class="mb-3">
+                    <label for="Discount">Discount</label>
+                    <input asp-for="Discount" type="number" min="0" step="0.01" class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="menuSelect">Select Menu Items</label>
+                    <select id="menuSelect" class="form-control" multiple="multiple" style="width: 100%;" required>
+                        @foreach (var menu in menus)
+                        {
+                            <option value="@menu.Id" data-price="@menu.Price">@menu.Item (@menu.Price.ToString("C"))</option>
+                        }
+                    </select>
+                </div>
+                <hr />
+                <p>Selected Items</p>
+                <table class="table table-bordered" id="selectedItemsTable">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- JS will populate selected items -->
+                    </tbody>
+                </table>
+                
+               <div class="d-flex justify-content-between align-items-center mt-4">
+                    <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-floppy"></i> Save</button>
+                    <a class="btn btn-sm btn-secondary" asp-action="Index"><i class="bi bi-arrow-left"></i> Back</a>
+               </div>
+            </form>
+        </div>
     </div>
 
-    <div class="mb-3">
-        <label for="Discount">Discount</label>
-        <input asp-for="Discount" type="number" min="0" step="0.01" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label for="menuSelect">Select Menu Items</label>
-        <select id="menuSelect" class="form-control" multiple="multiple" style="width: 100%;" required>
-            @foreach (var menu in menus)
-            {
-                <option value="@menu.Id" data-price="@menu.Price">@menu.Item (@menu.Price.ToString("C"))</option>
-            }
-        </select>
-    </div>
-
-    <h4>Selected Items</h4>
-    <table class="table table-bordered" id="selectedItemsTable">
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Remove</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- JS will populate selected items -->
-        </tbody>
-    </table>
-
-    <button type="submit" class="btn btn-success">Create Order</button>
-    <a class="btn btn-secondary" asp-action="Index">Back to List</a>
-</form>
-
+</div>
 @section Scripts {
 
     <script>
@@ -110,7 +119,11 @@
                                     <td>
                                         <input type="number" name="Items[${counter}].Quantity" value="1" min="1" class="form-control" />
                                     </td>
-                                    <td><button type="button" class="btn btn-danger btn-sm removeItem">Remove</button></td>
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-sm removeItem">
+                                            <i class="bi bi-x-circle"></i>
+                                        </button>
+                                    </td>
                                 </tr>
                                 `);
                                 counter++;

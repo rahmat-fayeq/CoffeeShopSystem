@@ -4,70 +4,76 @@
     ViewData["Title"] = "Orders";
 }
 
-<h2>Orders</h2>
-
-<p>
-    <a class="btn btn-primary" asp-action="Create"><i class="bi bi-plus-circle"></i> Add New Order</a>
-</p>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Table</th>
-            <th>Created At</th>
-            <th>Discount</th>
-            <th>Total</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var order in Model)
-        {
-            <tr>
-                <td>@order.Id</td>
-                <td>@order.TableName</td>
-                <td>@order.CreatedAt.ToString("g")</td>
-                <td>@order.Discount</td>
-                <td>@order.Total</td>
-                <td>
-                    @if (order.Status == "Completed")
+<div class="container-fluid mt-5">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-start align-items-center">
+                <a class="btn btn-outline-primary" asp-action="Create"><i class="bi bi-plus-circle"></i> Add</a>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-hover table-responsive">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Table</th>
+                        <th>Created At</th>
+                        <th>Discount</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
                     {
-                        <span class="badge badge-pill bg-success">
-                            <i class="bi bi-check"></i> Completed
-                        </span>
+                        <tr>
+                            <td>@order.Id</td>
+                            <td>@order.TableName</td>
+                            <td>@order.CreatedAt.ToString("g")</td>
+                            <td>@order.Discount</td>
+                            <td>@order.Total</td>
+                            <td>
+                                @if (order.Status == "Completed")
+                                {
+                                    <span class="badge badge-pill bg-success">
+                                        <i class="bi bi-check"></i> Completed
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-pill bg-danger">
+                                        <i class="bi bi-x"></i> Pending
+                                    </span>
+                                }
+
+                            </td>
+                            <td>
+                                <form asp-action="ToggleStatus" asp-route-id="@order.Id" method="post" class="d-inline">
+                                    <button type="submit"
+                                            class="btn btn-sm @(order.Status == "Pending" ? "btn-success" : "btn-secondary")"
+                                            @(order.Status == "Completed" ? "disabled" : "")>
+                                        @if (order.Status == "Pending")
+                                        {
+                                            <i class="bi bi-check2-circle"></i>
+                                            
+                                                                            }
+                                        else
+                                        {
+                                            <i class="bi bi-check-circle-fill text-success"></i>
+                                            
+                                                                        }
+                                    </button>
+                                </form>
+
+                                <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@order.Id"><i class="bi bi-eye"></i></a>
+                                <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@order.Id"><i class="bi bi-pencil-square"></i></a>
+                                <a class="btn btn-warning btn-sm" asp-action="Delete" asp-route-id="@order.Id"><i class="bi bi-trash3"></i></a>
+                            </td>
+                        </tr>
                     }
-                    else
-                    {
-                        <span class="badge badge-pill bg-danger">
-                            <i class="bi bi-x"></i> Pending
-                        </span>
-                    }
-
-                </td>
-                <td>
-                    <form asp-action="ToggleStatus" asp-route-id="@order.Id" method="post" class="d-inline">
-                        <button type="submit" class="btn btn-sm @(order.Status == "Pending" ? "btn-success" : "btn-danger")">
-                            @if (order.Status == "Pending")
-                            {
-                                <i class="bi bi-check2-circle"></i>
-                            }
-                            else
-                            {
-                                <i class="bi bi-x-circle-fill"></i>
-                                
-                            }
-                        </button>
-
-
-                    </form>
-
-                    <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@order.Id"><i class="bi bi-eye"></i></a>
-                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@order.Id"><i class="bi bi-pencil-square"></i></a>
-                    <a class="btn btn-warning btn-sm" asp-action="Delete" asp-route-id="@order.Id"><i class="bi bi-trash3"></i></a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

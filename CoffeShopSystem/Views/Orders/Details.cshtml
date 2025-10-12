@@ -2,38 +2,54 @@
 
 @{
     ViewData["Title"] = "Order Details";
+    int i = 1;
 }
 
-<h2>Order Details</h2>
-<hr />
-<div class="mb-3">
-    <p><strong>Table:</strong> @Model.TableName</p>
-    <p><strong>Ordered At:</strong> @Model.CreatedAt.ToString("g")</p>
-    <p><strong>Discount:</strong> @Model.Discount</p>
-    <p><strong>Total:</strong> @Model.Total</p>
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header">
+            <h2 class="text-center">Order Details</h2>
+        </div>
+        <div class="card-body">
+            <div class="mb-3">
+                <p><strong>Table #:</strong> @Model.TableName</p>
+                <p><strong>Ordered At:</strong> @Model.CreatedAt.ToString("g")</p>
+                @if(Model.Discount != 0)
+                {
+                    <p><strong>Discount:</strong> @Model.Discount AFN</p>
+                }
+                <p><strong>Total: @Model.Total </strong> AFN</p>
+            </div>
+
+            <h5>Order Items</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Item</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@item.ItemName</td>
+                            <td>@item.Price AFN</td>
+                            <td>@item.Quantity</td>
+                            <td>@(item.Price* item.Quantity) AFN</td>
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+            <a class="btn" asp-action="Index"><i class="bi bi-arrow-left"></i> Back</a>
+        </div>
+    </div>
+
 </div>
-
-<h4>Order Items</h4>
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>Item</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Subtotal</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Items)
-        {
-            <tr>
-                <td>@item.ItemName</td>
-                <td>@item.Price</td>
-                <td>@item.Quantity</td>
-                <td>@(item.Price* item.Quantity)</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<a class="btn btn-secondary" asp-action="Index">Back to List</a>

@@ -4,34 +4,34 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-
-<h4>Table</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="TableNumber" class="control-label"></label>
-                <input asp-for="TableNumber" class="form-control" />
-                <span asp-validation-for="TableNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FloorNumber" class="control-label"></label>
-                <input asp-for="FloorNumber" class="form-control" />
-                <span asp-validation-for="FloorNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="d-flex justify-content-center align-content-center mt-5">
+    <div class="card">
+        <div class="card-header">
+            <h5>Edit Table</h5>
+        </div>
+        <div class="card-body">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="TableNumber" class="control-label"></label>
+                    <input asp-for="TableNumber" class="form-control" />
+                    <span asp-validation-for="TableNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="FloorNumber" class="control-label"></label>
+                    <input asp-for="FloorNumber" class="form-control" />
+                    <span asp-validation-for="FloorNumber" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <button type="submit" class="btn btn-sm btn-primary"><i class="bi bi-floppy"></i> Save</button>
+                        <a class="btn btn-sm btn-secondary" asp-action="Index"><i class="bi bi-arrow-left"></i> Back</a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

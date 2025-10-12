@@ -2,40 +2,54 @@
 
 @{
     ViewData["Title"] = "Index";
+    int i = 1;
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.TableNumber)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FloorNumber)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.TableNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FloorNumber)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<div class="d-flex justify-content-center align-content-center mt-5">
+    <div class="card">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <a class="btn btn-outline-primary" asp-action="Create"><i class="bi bi-plus-circle"></i> Add</a>
+                <h5>Tables</h5>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-borderless table-responsive table-striped text-center">
+                <thead>
+                    <tr>
+                        <th>
+                             #
+                        </th>
+                        <th>
+                            Table Number
+                        </th>
+                        <th>
+                           Floor Number
+                        </th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td> @i </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.TableNumber)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FloorNumber)
+                            </td>
+                            <td class="d-flex gap-3">
+                                <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-eye"></i></a>
+                                <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i></a>
+                                <a class="btn btn-warning btn-sm" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash3"></i></a>
+                            </td>
+                        </tr>
+                        i++;
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
