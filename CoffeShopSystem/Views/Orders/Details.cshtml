@@ -1,4 +1,5 @@
 ﻿@model CoffeShopSystem.ViewModels.OrderVM.OrderDetailsVM
+@using Humanizer
 
 @{
     ViewData["Title"] = "Order Details";
@@ -13,7 +14,7 @@
         <div class="card-body">
             <div class="mb-3">
                 <p><strong>Table #:</strong> @Model.TableName</p>
-                <p><strong>Ordered At:</strong> @Model.CreatedAt.ToString("g")</p>
+                <p><strong>Ordered At:</strong> @Model.CreatedAt.ToString("g") (@Model.CreatedAt.Humanize())</p>
                 @if(Model.Discount != 0)
                 {
                     <p><strong>Discount:</strong> @Model.Discount AFN</p>

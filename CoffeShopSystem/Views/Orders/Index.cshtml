@@ -1,4 +1,5 @@
 ﻿@model IEnumerable<CoffeShopSystem.ViewModels.OrderVM.OrderDetailsVM>
+@using Humanizer
 
 @{
     ViewData["Title"] = "Orders";
@@ -17,7 +18,7 @@
                     <tr>
                         <th>Id</th>
                         <th>Table</th>
-                        <th>Created At</th>
+                        <th>Time</th>
                         <th>Discount</th>
                         <th>Total</th>
                         <th>Status</th>
@@ -30,7 +31,7 @@
                         <tr>
                             <td>@order.Id</td>
                             <td>@order.TableName</td>
-                            <td>@order.CreatedAt.ToString("g")</td>
+                            <td>@order.CreatedAt.Humanize()</td>
                             <td>@order.Discount</td>
                             <td>@order.Total</td>
                             <td>
