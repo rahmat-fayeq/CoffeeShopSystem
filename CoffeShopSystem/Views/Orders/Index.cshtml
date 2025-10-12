@@ -50,26 +50,17 @@
 
                             </td>
                             <td>
-                                <form asp-action="ToggleStatus" asp-route-id="@order.Id" method="post" class="d-inline">
-                                    <button type="submit"
-                                            class="btn btn-sm @(order.Status == "Pending" ? "btn-success" : "btn-secondary")"
-                                            @(order.Status == "Completed" ? "disabled" : "")>
-                                        @if (order.Status == "Pending")
-                                        {
+                                @if (order.Status == "Pending")
+                                {
+                                    <form asp-action="ToggleStatus" asp-route-id="@order.Id" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-success">
                                             <i class="bi bi-check2-circle"></i>
-                                            
-                                                                            }
-                                        else
-                                        {
-                                            <i class="bi bi-check-circle-fill text-success"></i>
-                                            
-                                                                        }
-                                    </button>
-                                </form>
-
+                                        </button>
+                                    </form>
+                                    <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@order.Id"><i class="bi bi-pencil-square"></i></a>
+                                    <a class="btn btn-warning btn-sm" asp-action="Delete" asp-route-id="@order.Id"><i class="bi bi-trash3"></i></a>
+                                }
                                 <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@order.Id"><i class="bi bi-eye"></i></a>
-                                <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@order.Id"><i class="bi bi-pencil-square"></i></a>
-                                <a class="btn btn-warning btn-sm" asp-action="Delete" asp-route-id="@order.Id"><i class="bi bi-trash3"></i></a>
                             </td>
                         </tr>
                     }
