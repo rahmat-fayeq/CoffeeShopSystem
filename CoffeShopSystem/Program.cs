@@ -1,6 +1,7 @@
 using AspNetCoreHero.ToastNotification;
 using CoffeShopSystem.Data;
 using CoffeShopSystem.Profiles;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -8,10 +9,20 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+// Add Identity
+builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequiredLength = 4;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+})
+.AddEntityFrameworkStores<AppDbContext>();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddRazorPages();
+// Auto Mapper Configurations
 builder.Services.AddAutoMapper(cfg => {}, typeof(AutoMapperProfile).Assembly);
 
 // Notification
@@ -35,10 +46,41 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages();
+
+// Block access to unused Identity pages by returning 404 Not Found
+var blockedRoutes = new[]
+{
+    "/Identity/Account/Register",
+    "/Identity/Account/ConfirmEmail",
+    "/Identity/Account/ForgotPassword",
+    "/Identity/Account/ForgotPasswordConfirmation",
+    "/Identity/Account/ResetPassword",
+    "/Identity/Account/ResetPasswordConfirmation",
+
+    "/Identity/Account/Manage/Email",
+    "/Identity/Account/Manage/ExternalLogins",
+    "/Identity/Account/Manage/PersonalData",
+    "/Identity/Account/Manage/TwoFactorAuthentication",
+    "/Identity/Account/Manage/EnableAuthenticator",
+    "/Identity/Account/Manage/Disable2fa",
+    "/Identity/Account/Manage/GenerateRecoveryCodes",
+    "/Identity/Account/Manage/RecoveryCodes",
+    "/Identity/Account/Manage/DownloadPersonalData",
+    "/Identity/Account/Manage/DeletePersonalData"
+};
+
+foreach (var route in blockedRoutes)
+{
+    app.MapGet(route, () => Results.NotFound());
+    app.MapPost(route, () => Results.NotFound());
+}
 
 app.Run();

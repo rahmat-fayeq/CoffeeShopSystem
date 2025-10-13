@@ -1,6 +1,7 @@
 ﻿using CoffeShopSystem.Data;
 using CoffeShopSystem.Models;
 using CoffeShopSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
