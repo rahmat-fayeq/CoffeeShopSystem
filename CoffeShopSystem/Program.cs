@@ -1,7 +1,9 @@
 using AspNetCoreHero.ToastNotification;
 using CoffeShopSystem.Data;
 using CoffeShopSystem.Profiles;
+using CoffeShopSystem.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -38,6 +40,7 @@ builder.Services.AddNotyf(config =>
 }
 );
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -51,6 +54,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapRazorPages();
 
 app.MapControllerRoute(
     name: "default",
@@ -82,8 +87,8 @@ var blockedRoutes = new[]
 
 foreach (var route in blockedRoutes)
 {
-    app.MapGet(route, () => Results.NotFound());
-    app.MapPost(route, () => Results.NotFound());
+    app.MapGet(route, () => Results.Redirect("/Identity/Account/AccessDenied"));
+    app.MapPost(route, () => Results.Redirect("/Identity/Account/AccessDenied"));
 }
 
 // Seed to Db
@@ -91,5 +96,7 @@ using (var scope = app.Services.CreateScope())
 {
     await DbSeeder.SeedRolesAndAdminAsync(scope.ServiceProvider);
 }
+
+
 
 app.Run();
