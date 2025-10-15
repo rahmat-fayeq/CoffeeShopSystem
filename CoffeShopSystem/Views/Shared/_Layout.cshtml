@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity.EntityFrameworkCore
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -22,6 +27,8 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse" id="navbarColor01" style="">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Tables" asp-action="Index">Table</a>
@@ -33,7 +40,21 @@
                             <a class="nav-link" asp-area="" asp-controller="Orders" asp-action="Index">Orders</a>
                         </li>
                     </ul>
-                    <partial name="_LoginPartial" />
+                    <ul class="navbar-nav">
+                       
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                                    <i class="bi bi-person-circle"></i> Hello, @UserManager.GetUserName(User)!
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <form asp-area="Identity" asp-page="/Account/Logout" method="post" id="logoutForm" class="form-inline">
+                                    <button type="submit" class="nav-link btn btn-link text-danger border-0">LogOut</button>
+                                </form>
+                            </li>
+                      
+                    </ul>
+                    }
                 </div>
             </div>
         </nav>

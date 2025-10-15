@@ -3,6 +3,7 @@ using AutoMapper;
 using CoffeShopSystem.Data;
 using CoffeShopSystem.Models;
 using CoffeShopSystem.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace CoffeShopSystem.Controllers
 {
+    [Authorize]
     public class TablesController : Controller
     {
         private readonly AppDbContext _context;

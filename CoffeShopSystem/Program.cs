@@ -24,6 +24,12 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 .AddEntityFrameworkStores<AppDbContext>()
 .AddDefaultTokenProviders();
 
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login"; 
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied"; 
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
@@ -87,8 +93,8 @@ var blockedRoutes = new[]
 
 foreach (var route in blockedRoutes)
 {
-    app.MapGet(route, () => Results.Redirect("/Identity/Account/AccessDenied"));
-    app.MapPost(route, () => Results.Redirect("/Identity/Account/AccessDenied"));
+    app.MapGet(route, () => Results.NotFound());
+    app.MapPost(route, () => Results.NotFound());
 }
 
 // Seed to Db
