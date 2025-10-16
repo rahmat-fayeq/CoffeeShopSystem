@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CoffeShopSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251013085855_AddedIdentityTables")]
-    partial class AddedIdentityTables
+    [Migration("20251016063636_AddedTables")]
+    partial class AddedTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -334,7 +334,7 @@ namespace CoffeShopSystem.Migrations
                     b.HasOne("CoffeShopSystem.Models.Table", "Table")
                         .WithMany("Orders")
                         .HasForeignKey("TableId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Table");
@@ -351,7 +351,7 @@ namespace CoffeShopSystem.Migrations
                     b.HasOne("CoffeShopSystem.Models.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Menu");

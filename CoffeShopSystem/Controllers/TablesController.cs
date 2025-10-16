@@ -159,13 +159,22 @@ namespace CoffeShopSystem.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var table = await _context.Tables.FindAsync(id);
-            if (table != null)
+
+            if (table == null)
+                return NotFound();
+
+            try
             {
                 _context.Tables.Remove(table);
+                await _context.SaveChangesAsync();
+
+                _notfy.Success("Table deleted successfully.");
+            }
+            catch (DbUpdateException)
+            {
+                _notfy.Error("This table cannot be deleted because it has related orders.");
             }
 
-            await _context.SaveChangesAsync();
-            _notfy.Warning("Table deleted successfully");
             return RedirectToAction(nameof(Index));
         }
 

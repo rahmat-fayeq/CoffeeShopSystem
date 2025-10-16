@@ -331,7 +331,7 @@ namespace CoffeShopSystem.Migrations
                     b.HasOne("CoffeShopSystem.Models.Table", "Table")
                         .WithMany("Orders")
                         .HasForeignKey("TableId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Table");
@@ -348,7 +348,7 @@ namespace CoffeShopSystem.Migrations
                     b.HasOne("CoffeShopSystem.Models.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Menu");

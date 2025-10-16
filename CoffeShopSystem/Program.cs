@@ -1,7 +1,6 @@
 using AspNetCoreHero.ToastNotification;
 using CoffeShopSystem.Data;
 using CoffeShopSystem.Profiles;
-using CoffeShopSystem.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;

@@ -158,13 +158,22 @@ namespace CoffeShopSystem.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var menu = await _context.Menus.FindAsync(id);
-            if (menu != null)
+            if (menu == null)
             {
-                _context.Menus.Remove(menu);
+                return NotFound();
             }
 
-            await _context.SaveChangesAsync();
-            _notyf.Warning("Menu item deleted successfully");
+            try
+            {
+                _context.Menus.Remove(menu);
+                await _context.SaveChangesAsync();
+                _notyf.Success("Menu item deleted successfully.");
+            }
+            catch(DbUpdateException)
+            {
+                _notyf.Error("This menu cannot be deleted because it has related orders.");
+            }
+            
             return RedirectToAction(nameof(Index));
         }
 

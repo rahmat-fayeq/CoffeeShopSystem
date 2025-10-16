@@ -22,13 +22,13 @@ namespace CoffeShopSystem.Data
                 .HasOne(o => o.Table)
                 .WithMany(t => t.Orders)
                 .HasForeignKey(o => o.TableId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<OrderItem>()
                 .HasOne(oi => oi.Order)
                 .WithMany(o => o.OrderItems)
                 .HasForeignKey(oi => oi.OrderId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<OrderItem>()
                 .HasOne(oi => oi.Menu)
