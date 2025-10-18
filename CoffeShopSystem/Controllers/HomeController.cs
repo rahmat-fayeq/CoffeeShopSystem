@@ -58,8 +58,9 @@ namespace CoffeShopSystem.Controllers
             int yearlyOrders = orders.Count(o => o.CreatedAt >= startOfYear);
             int totalOrders = orders.Count();
 
-            // 🥇 Top 5 Menus 
+            // 🥇 Top 5 Menus of this month
             var topMenus = orders
+            .Where(o => o.CreatedAt.Month == DateTime.UtcNow.Month && o.CreatedAt.Year == DateTime.UtcNow.Year)
             .SelectMany(o => o.OrderItems)
             .GroupBy(oi => new { oi.MenuId, oi.Menu.Item })
             .Select(g => new TopMenuVM
